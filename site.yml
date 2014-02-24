@@ -1,0 +1,30 @@
+---
+# 使い方:
+#   ansible-playbook -i <(echo x.x.x.x) -u ec2-user --private-key=~/.ssh/xxx.pem site.yml \
+#     --extra-vars "main_username=username main_password=`openssl passwd -salt salty -1 password` docroot=/var/www/html/docroot dbroot=/var/lib/pgsql9/data cake_env_mode=development"
+# 備考:
+#   - x.x.x.xは設定対象のホストのIPアドレスまたはDNS名を指定してください
+#   - ~/.ssh/xxx.pemはsshの秘密鍵ファイルです。ec2-userでsshに接続しようとします
+#     sshの秘密鍵にパスフレーズを設定している場合は、ssh-agent bash; ssh-add ~/.ssh/xxx.pem、としてパスフレーズを事前入力してください
+#   - main_usernameで指定した名前のユーザ・グループが作成され、パスワードはpasswordになります
+#   - docrootで指定したディレクトリがhttpdのDocumentRootとなり
+#     所有者・所有グループはmain_usernameで指定したユーザになります
+#   - Apacheの環境変数としてCAKE_ENV_MODEをcake_env_modeに指定された値で定義します
+#   - dbrootで指定したディレクトリがPostgreSQLのディレクトリになります
+#   - PostgreSQLにはlocalhostからはID/PASS:postgres/postgresでアクセスできます
+#   - 実行後は一度再起動してください
+- name: for CakePHP on LAPP (Amazon Linux 2013.09, PostgreSQL 9.2, PHP 5.4) Ver. 20140224
+  hosts: all
+  vars:
+    l_main_username: "{{ main_username }}"
+    l_main_password: "{{ main_password }}"
+    l_docroot: "{{ docroot }}"
+    l_dbroot: "{{ dbroot }}"
+    l_cake_env_mode: "{{ cake_env_mode }}"
+  user: ec2-user
+  sudo: yes
+  roles:
+    - common
+    - apache24
+    - php54
+    - postgresql92

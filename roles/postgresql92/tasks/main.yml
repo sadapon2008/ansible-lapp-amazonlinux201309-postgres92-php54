@@ -1,0 +1,44 @@
+---
+# postgresql9のインストール
+- name: install postgresql9
+  yum: name={{ item }} state=latest
+  with_items:
+  - postgresql9-server
+  - postgresql9-contrib
+# 自動起動の設定
+- name: enable postgresql9
+  service: name=postgresql enabled=yes
+# データのディレクトリを準備
+- name: make directory for dbroot 1
+  file: path={{ l_dbroot }} state=directory owner=postgres group=postgres mode=700
+- name: make directory for dbroot 2
+  file: path={{ l_dbroot }}/data state=directory owner=postgres group=postgres mode=700
+- name: make directory for dbroot 3
+  file: path={{ l_dbroot }}/backups state=directory owner=postgres group=postgres mode=700
+# PGDATAとPGLOGの設定
+- name: create /etc/sysconfig/pgsql/postgresql
+  template: src=postgresql.j2 dest=/etc/sysconfig/pgsql/postgresql owner=root group=root mode=0644
+# 設定済みかの確認
+- name: check postgresql.conf
+  command: test -f "{{ l_dbroot }}/data/postgresql.conf"
+  register: result
+  ignore_errors: true
+# 初期化
+- name: initdb
+  command: su postgres -c '/usr/bin/initdb --no-locale -D {{ l_dbroot }}/data -E UTF8'
+  when: result|failed
+# サービス起動
+- name: start postgresql92
+  service: name=postgresql state=started
+# postgresユーザのパスワード初期化
+- name: config postgres password
+  command: /usr/bin/psql -U postgres -c "ALTER USER postgres with unencrypted password 'postgres';"
+  when: result|failed
+# パスワード認証の設定
+- name: config pg_hba.conf
+  copy: src=pg_hba.conf dest={{ l_dbroot }}/data/pg_hba.conf owner=postgres group=postgres mode=0644
+  when: result|failed
+# サービス再起動
+- name: restart postgresql92
+  service: name=postgresql state=restarted
+  when: result|failed

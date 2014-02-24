@@ -1,0 +1,21 @@
+---
+# php54のインストール
+- name: install php54
+  yum: name={{ item }} state=present
+  with_items:
+  - php54
+  - php54-devel
+  - php54-gd
+  - php54-mbstring
+  - php54-pecl-apc
+  - php54-xml
+  - php54-pgsql
+  - php54-mysqlnd
+# ここから https://gist.github.com/debility/8838906 を反映
+- name: config PHP 1
+  copy: src=my.ini dest=/etc/php.d/my.ini owner=root group=root mode=0644
+# ここまで https://gist.github.com/debility/8838906 を反映
+- name: config PHP 2
+  copy: src=timezone.ini dest=/etc/php.d/timezone.ini owner=root group=root mode=0644
+- name: restart httpd
+  service: name=httpd state=restarted
