@@ -1,7 +1,7 @@
 ---
 # 使い方:
 #   ansible-playbook -i <(echo x.x.x.x) -u ec2-user --private-key=~/.ssh/xxx.pem site.yml \
-#     --extra-vars "main_username=username main_password=`openssl passwd -salt salty -1 password` docroot=/var/www/html/docroot dbroot=/var/lib/pgsql9/data cake_env_mode=development"
+#     --extra-vars "main_username=username main_password=`openssl passwd -salt salty -1 password` docroot=/var/www/html/docroot dbroot=/var/lib/pgsql9 cake_env_mode=development"
 # 備考:
 #   - x.x.x.xは設定対象のホストのIPアドレスまたはDNS名を指定してください
 #   - ~/.ssh/xxx.pemはsshの秘密鍵ファイルです。ec2-userでsshに接続しようとします

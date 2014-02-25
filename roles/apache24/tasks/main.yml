@@ -23,6 +23,7 @@
   lineinfile: dest=/etc/httpd/conf/httpd.conf regexp='^(\s*ScriptAlias\s+/cgi-bin/.*)$' line='#\1' backrefs=yes
 - name: change httpd.conf 4
   raw: sed -i
+           -e '/^\s*<Directory "\/var\/www">/,/^\s*<\/Directory>/s/^/#/'
            -e '/^\s*<Directory "\/var\/www\/html">/,/^\s*<\/Directory>/s/^/#/'
            -e '/^\s*<Directory "\/var\/www\/cgi-bin">/,/^\s*<\/Directory>/s/^/#/'
            /etc/httpd/conf/httpd.conf
