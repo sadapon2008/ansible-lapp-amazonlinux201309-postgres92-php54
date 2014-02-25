@@ -13,7 +13,7 @@
 #   - dbrootで指定したディレクトリがPostgreSQLのディレクトリになります
 #   - PostgreSQLにはlocalhostからはID/PASS:postgres/postgresでアクセスできます
 #   - 実行後は一度再起動してください
-- name: for CakePHP on LAPP (Amazon Linux 2013.09, PostgreSQL 9.2, PHP 5.4) Ver. 20140224
+- name: for CakePHP on LAPP (Amazon Linux 2013.09, PostgreSQL 9.2, PHP 5.4) Ver. 20140225
   hosts: all
   vars:
     l_main_username: "{{ main_username }}"
@@ -21,6 +21,7 @@
     l_docroot: "{{ docroot }}"
     l_dbroot: "{{ dbroot }}"
     l_cake_env_mode: "{{ cake_env_mode }}"
+    colon: ':'
   user: ec2-user
   sudo: yes
   roles:

@@ -1,7 +1,18 @@
 ---
+# cloud-initの設定
+- name: change cloud.cfg 1
+  lineinfile: dest=/etc/cloud/cloud.cfg regexp="^repo_upgrade:.*" line="repo_upgrade{{colon}} none"
+- name: change cloud.cfg 2
+  lineinfile: dest=/etc/cloud/cloud.cfg regexp="^locale:.*" line="locale{{colon}} ja_JP.UTF-8"
 # タイムゾーンの変更
-- name: change timezone
+- name: change timezone 1
   raw: cp -f /usr/share/zoneinfo/Japan /etc/localtime
+- name: change timezone 2
+  lineinfile: dest=/etc/sysconfig/clock regexp="^ZONE=.*" line="ZONE=\"Asia/Tokyo\""
+- name: change timezone 3
+  lineinfile: dest=/etc/sysconfig/clock regexp="^UTC=.*" line="UTC=False"
+- name: change timezone 4
+  lineinfile: dest=/etc/sysconfig/clock regexp="^ARC=.*" line="ARC=False"
 # システム言語の変更
 - name: change system language
   lineinfile: dest=/etc/sysconfig/i18n regexp="^LANG=\"en_US\.UTF-8\"" line="LANG=\"ja_JP.UTF-8\"" backrefs=yes
