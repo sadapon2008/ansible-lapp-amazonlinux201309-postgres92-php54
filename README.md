@@ -9,5 +9,5 @@ This playbook requires Ansible 1.4
     DOCROOT=/var/www/html/docroot
     DBROOT=/var/lib/pgsql9
     CAKE_ENV_MODE=development
-    ansible-playbook -i <(echo ${TARGET_HOST}) -u ec2-user --private-key=~/.ssh/xxx.pem site.yml \
+    env ANSIBLE_HOST_KEY_CHECKING=False ansible-playbook -i <(echo ${TARGET_HOST}) -u ec2-user --private-key=~/.ssh/xxx.pem site.yml \
       --extra-vars "main_username=${MAIN_USERNAME} main_password=`openssl passwd -salt salty -1 ${MAIN_PASSWORD}` docroot=${DOCROOT} dbroot=${DBROOT} cake_env_mode=${CAKE_ENV_MODE}"
